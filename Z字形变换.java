@@ -18,27 +18,30 @@
 // 只有当我们向上移动到最上面的行或向下移动到最下面的行时，当前方向才会发生改变。
 
 // *----------------------------------------------------------------------------*
-string convert(string s, int numRows) {
+public String convert(String s, int numRows) {
+
     if (numRows == 1) return s;
-    
-    // 创建大小为min(numRows, int(s.size()))的向量
-    vector<string> rows(min(numRows, int(s.size())));
+
+    List<StringBuilder> rows = new ArrayList<>();
+    for (int i = 0; i < Math.min(numRows, s.length()); i++)
+        rows.add(new StringBuilder());
+
     // 此时位于第几行
     int curRow = 0;
     // 上升状态或下降状态
-    bool goingDown = false;
+    boolean goingDown = false;
 
     // 遍历s
-    for (char c : s) {
+    for (char c : s.toCharArray()) {
         // 存储每层的字符串
-        rows[curRow] += c;
+        rows.get(curRow).append(c);
         if (curRow == 0 || curRow == numRows - 1) goingDown = !goingDown;
         curRow += goingDown ? 1 : -1;
     }
 
-    string ret;
-    for (string row : rows) ret += row;
-    return ret;
+    StringBuilder ret = new StringBuilder();
+    for (StringBuilder row : rows) ret.append(row);
+    return ret.toString();
 }
 
 // *----------------------------------------------------------------------------*
@@ -71,24 +74,23 @@ string convert(string s, int numRows) {
 //    2row_num - 2为一组
 
 // *----------------------------------------------------------------------------*
-// (C++, JAVA)
-string convert(string s, int numRows) {
+public String convert(String s, int numRows) {
     if (numRows == 1) return s;
 
-    string ret;
-    int n = s.size();
+    StringBuilder ret = new StringBuilder();
+    int n = s.length();
     int cycleLen = 2 * numRows - 2;
 
     for (int i = 0; i < numRows; i++) {
         // 第i行所有字符; j = k*cycleLen (k=0,1,2...)
         for (int j = 0; j + i < n; j += cycleLen) {
-            ret += s[j + i];
+            ret.append(s.charAt(j + i));
             // 添加第中间行的中间值
             if (i != 0 && i != numRows - 1 && j + cycleLen - i < n)
-                ret += s[j + cycleLen - i];
+                ret.append(s.charAt(j + cycleLen - i));
         }
     }
-    return ret;
+    return ret.toString();
 }
 
 // *----------------------------------------------------------------------------*

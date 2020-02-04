@@ -1,4 +1,4 @@
-(python 3)
+(JAVA; python 3)
 
 给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且有效的括号组合。
 
@@ -11,58 +11,39 @@
   "()()()"
 ]
 
+*--------------------------------------------------------------------------------------------------------------------------------*
 方法一：暴力法
-思路
+思路: 我们可以生成所有 2^(2n) 个 '(' 和 ')' 字符构成的序列。然后，我们将检查每一个是否有效。
 
-我们可以生成所有 2^{2n}2 
-2n
-  个 '(' 和 ')' 字符构成的序列。然后，我们将检查每一个是否有效。
+算法: 为了生成所有序列，我们使用递归。长度为 n 的序列就是 '(' 加上所有长度为 n-1 的序列，以及 ')' 加上所有长度为 n-1 的序列。为了检查序列
+是否为有效的，我们会跟踪 平衡，也就是左括号的数量减去右括号的数量的净值。如果这个值始终小于零或者不以零结束，该序列就是无效的，否则它是有效的。
 
-算法
+*------------------------------------------------------------------------------------*
+ def generateParenthesis(self, n):
+    def generate(A = []):
+        if len(A) == 2*n:
+            if valid(A):
+                ans.append("".join(A))
+        else:
+            A.append('(')
+            generate(A)
+            A.pop()
+            A.append(')')
+            generate(A)
+            A.pop()
 
-为了生成所有序列，我们使用递归。长度为 n 的序列就是 '(' 加上所有长度为 n-1 的序列，以及 ')' 加上所有长度为 n-1 的序列。
+    def valid(A):
+        bal = 0
+        for c in A:
+            if c == '(': bal += 1
+            else: bal -= 1
+            if bal < 0: return False
+        return bal == 0
 
-为了检查序列是否为有效的，我们会跟踪 平衡，也就是左括号的数量减去右括号的数量的净值。如果这个值始终小于零或者不以零结束，该序列就是无效的，否则它是有效的。
-
-JavaPython
-class Solution {
-    public List<String> generateParenthesis(int n) {
-        List<String> combinations = new ArrayList();
-        generateAll(new char[2 * n], 0, combinations);
-        return combinations;
-    }
-
-    public void generateAll(char[] current, int pos, List<String> result) {
-        if (pos == current.length) {
-            if (valid(current))
-                result.add(new String(current));
-        } else {
-            current[pos] = '(';
-            generateAll(current, pos+1, result);
-            current[pos] = ')';
-            generateAll(current, pos+1, result);
-        }
-    }
-
-    public boolean valid(char[] current) {
-        int balance = 0;
-        for (char c: current) {
-            if (c == '(') balance++;
-            else balance--;
-            if (balance < 0) return false;
-        }
-        return (balance == 0);
-    }
-}
-
-def generateParenthesis(self, N):
-    if N == 0: return ['']
     ans = []
-    for c in xrange(N):
-        for left in self.generateParenthesis(c):
-            for right in self.generateParenthesis(N-1-c):
-                ans.append('({}){}'.format(left, right))
+    generate()
     return ans
+        
 复杂度分析
 
 时间复杂度：O(2^{2n}n)O(2 

@@ -36,7 +36,7 @@ def permute(self, nums: List[int]) -> List[List[int]]:
         print('nums:', nums, 'tmp:', tmp)
         if not nums:
             res.append(tmp)
-            print('res:', res,'tmp:', tmp)
+            print('——res:', res,'tmp:', tmp)
             return 
         for i in range(len(nums)):
             backtrack(nums[:i] + nums[i+1:], tmp + [nums[i]])
